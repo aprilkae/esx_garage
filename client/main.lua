@@ -3,7 +3,6 @@ local LastGarage 	  = nil
 local LastPart   	  = nil
 local LastParking	  = nil
 local thisGarage 	  = nil
-local garageName	  = nil
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -29,7 +28,6 @@ AddEventHandler('esx_garage:hasEnteredMarker', function(name, part, parking)
 		local coords    = GetEntityCoords(playerPed)
 		local garage    = Config.Garages[name]
 		thisGarage 		= garage
-		garageName 		= name
 		
 		for i=1, #Config.Garages, 1 do
 			if Config.Garages[i].name ~= name then
@@ -266,7 +264,6 @@ AddEventHandler('esx_garage:hasEnteredMarker', function(name, part, parking)
 		end
 		
 		thisGarage = nil
-		garageName = nil
 
 	end
 
@@ -281,7 +278,7 @@ AddEventHandler('esx_garage:hasEnteredMarker', function(name, part, parking)
 			local vehicle       = GetVehiclePedIsIn(playerPed, false)
 			local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
 
-			TriggerServerEvent('esx_garage:setParking', garageName, parking, vehicleProps)
+			TriggerServerEvent('esx_garage:setParking', name, parking, vehicleProps)
 
 			if Config.EnableOwnedVehicles then
 				TriggerServerEvent('esx_garage:updateOwnedVehicle', vehicleProps)
@@ -302,7 +299,7 @@ AddEventHandler('esx_property:hasExitedMarker', function(name, part, parking)
 		local parkingPos = garage.Parkings[parking].Pos
 
 		if IsPedInAnyVehicle(playerPed, false) and not IsAnyVehicleNearPoint(parkingPos.x, parkingPos.y, parkingPos.z, 1.0) then
-			TriggerServerEvent('esx_garage:setParking', garageName, parking, false)
+			TriggerServerEvent('esx_garage:setParking', name, parking, false)
 		end
 	
 	end
